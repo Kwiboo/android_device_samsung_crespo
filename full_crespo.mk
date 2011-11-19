@@ -1,4 +1,4 @@
-# Copyright (C) 2009 The Android Open Source Project
+# Copyright (C) 2011 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,17 +16,23 @@
 # This file is the build configuration for a full Android
 # build for crespo hardware. This cleanly combines a set of
 # device-specific aspects (drivers) with a device-agnostic
-# product configuration (apps).
+# product configuration (apps). Except for a few implementation
+# details, it only fundamentally contains two inherit-product
+# lines, full and crespo, hence its name.
 #
 
+# Get the long list of APNs
+PRODUCT_COPY_FILES := device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml
+
 # Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # This is where we'd set a backup provider if we had one
 #$(call inherit-product, device/sample/products/backup_overlay.mk)
+# Inherit from crespo device
 $(call inherit-product, device/samsung/crespo/device.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
 
-# Discard inherited values and use our own instead.
+# Set those variables here to overwrite the inherited values.
 PRODUCT_NAME := full_crespo
 PRODUCT_DEVICE := crespo
-PRODUCT_MODEL := Full Android on Crespo
+PRODUCT_BRAND := Android
+PRODUCT_MODEL := Full AOSP on Crespo

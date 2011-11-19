@@ -23,12 +23,18 @@
 
 namespace android {
 
-OMXPluginBase *createOMXPlugin() {
+extern "C" OMXPluginBase *createOMXPlugin() {
     return new SECOMXPlugin;
 }
 
+extern "C" void destroyOMXPlugin(OMXPluginBase *plugin) {
+    delete plugin;
+}
+
+#define LIBOMX "libSEC_OMX_Core.so"
+
 SECOMXPlugin::SECOMXPlugin()
-    : mLibHandle(dlopen("libSEC_OMX_Core.so", RTLD_NOW)),
+    : mLibHandle(dlopen(LIBOMX, RTLD_NOW)),
       mInit(NULL),
       mDeinit(NULL),
       mComponentNameEnum(NULL),
@@ -50,8 +56,9 @@ SECOMXPlugin::SECOMXPlugin()
                     mLibHandle, "SEC_OMX_GetRolesOfComponent");
 
         (*mInit)();
-
     }
+    else
+        LOGE("%s: failed to load %s", __func__, LIBOMX);
 }
 
 SECOMXPlugin::~SECOMXPlugin() {
@@ -92,6 +99,7 @@ OMX_ERRORTYPE SECOMXPlugin::enumerateComponents(
         size_t size,
         OMX_U32 index) {
     if (mLibHandle == NULL) {
+	LOGE("mLibHandle is NULL!");
         return OMX_ErrorUndefined;
     }
 
@@ -144,4 +152,3 @@ OMX_ERRORTYPE SECOMXPlugin::getRolesOfComponent(
 }
 
 }  // namespace android
-

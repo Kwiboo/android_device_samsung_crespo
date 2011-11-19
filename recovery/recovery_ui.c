@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2011 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,9 @@ char* MENU_ITEMS[] = { "reboot system now",
                        "wipe data/factory reset",
                        "wipe cache partition",
                        NULL };
+
+void device_ui_init(UIParameters* ui_parameters) {
+}
 
 int device_recovery_start() {
     // recovery can get started before the kernel has created the EMMC
