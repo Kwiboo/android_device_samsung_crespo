@@ -15,3 +15,4 @@
 #
 
 add_lunch_combo full_crespo-userdebug
+add_lunch_combo full_crespo-user
